@@ -1,0 +1,10 @@
+R:\TsuSploit\TsuSploit\Updater\bin\Debug\Updater.exe.config
+R:\TsuSploit\TsuSploit\Updater\bin\Debug\Updater.exe
+R:\TsuSploit\TsuSploit\Updater\bin\Debug\Updater.pdb
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.MainFrm.resources
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.Properties.Resources.resources
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.csproj.GenerateResource.cache
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.csproj.Fody.CopyLocal.cache
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.exe
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.pdb
+R:\TsuSploit\TsuSploit\Updater\obj\Debug\Updater.csprojAssemblyReference.cache

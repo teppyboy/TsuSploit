@@ -1,0 +1,2 @@
+-base.R:\TsuSploit\TsuSploit\Updater\bin\Debug\memes.txt
+-new.R:\TsuSploit\TsuSploit\Updater\bin\Debug\weird.txt

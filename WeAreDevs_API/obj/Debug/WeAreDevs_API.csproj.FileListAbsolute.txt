@@ -1,0 +1,5 @@
+R:\TsuSploit\TsuSploit\WeAreDevs_API\obj\Debug\WeAreDevs_API.csprojAssemblyReference.cache
+R:\TsuSploit\TsuSploit\WeAreDevs_API\bin\Debug\WeAreDevs_API.dll
+R:\TsuSploit\TsuSploit\WeAreDevs_API\bin\Debug\WeAreDevs_API.pdb
+R:\TsuSploit\TsuSploit\WeAreDevs_API\obj\Debug\WeAreDevs_API.dll
+R:\TsuSploit\TsuSploit\WeAreDevs_API\obj\Debug\WeAreDevs_API.pdb
