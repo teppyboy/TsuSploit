@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Net;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Updater
 {
@@ -174,7 +175,7 @@ namespace Updater
             }
             Environment.Exit(0);
         }
-        private void wc_DFC(object sender, AsyncCompletedEventArgs e)
+        private async void wc_DFC(object sender, AsyncCompletedEventArgs e)
         {
             Console.WriteLine("Downloaded " + rndFile + ". Replacing file");
             if (new FileInfo(rndFile).Length != 0)
@@ -188,11 +189,14 @@ namespace Updater
                     }
                     File.Move(rndFile, Program.baseApp);
                     Console.WriteLine("Moved " + rndFile + " to " + Program.baseApp);
+                    await Task.Delay(100);
                     File.Delete(rndFileName);
                     Console.WriteLine("Deleted " + rndFileName);
+                    await Task.Delay(100);
                     File.Delete(rndFile);
                     Console.WriteLine("Deleted " + rndFile);
                     Console.WriteLine("Update sucess...");
+                    await Task.Delay(100);
                     if (Program.relaunch)
                         LaunchApp();
                     Environment.Exit(0);
@@ -201,9 +205,12 @@ namespace Updater
                 {
                     Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                     Console.WriteLine(ex);
+                    await Task.Delay(100);
                     File.Move(rndFileName, Program.baseApp);
+                    await Task.Delay(100);
                     File.Delete(rndFile);
                     MessageBox.Show("Failed to update app so i reverted update.... Logs are below...\n" + ex, "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await Task.Delay(100);
                     if (Program.relaunch)
                         LaunchApp();
                     Environment.Exit(0);
@@ -213,7 +220,9 @@ namespace Updater
             {
                 Console.WriteLine("Downloaded file size is 0, restoring original app...");
                 File.Move(rndFileName, Program.baseApp);
+                await Task.Delay(100);
                 File.Delete(rndFile);
+                await Task.Delay(100);
                 MessageBox.Show("Failed to update app so i reverted update....", "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error); 
                 if (Program.relaunch)
                     LaunchApp();
