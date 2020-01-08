@@ -54,6 +54,9 @@ namespace Updater
                     }
                     else if (args[0].Contains("-mapper."))
                     {
+                        MessageBox.Show("Disabled for now, sorry!", "Updater");
+                        Environment.Exit(0);
+                        /*
                         mapmode = true;
                         var file = args[0].Remove(0, 8);
                         if (File.Exists(file))
@@ -78,7 +81,7 @@ namespace Updater
                         {
                             Console.WriteLine("Map file not found...");
                             Environment.Exit(0);
-                        }
+                        }*/
                     }
                     else
                     {
