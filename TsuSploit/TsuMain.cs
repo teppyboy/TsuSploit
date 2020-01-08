@@ -12,6 +12,10 @@ using WeAreDevs_API;
 using EasyExploits;
 using System.IO;
 using Microsoft.Win32;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
+using System.Net;
+using System.ComponentModel;
 
 namespace TsuSploit
 {
@@ -51,6 +55,10 @@ namespace TsuSploit
             {
                 MessageBox.Show("Failed to get files & directories from " + sDir + "\nLogs\n" + excpt.Message);
             }
+        }
+        private static bool AlwaysGoodCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
+        {
+            return true;
         }
         private void ListBoxInit()
         {
@@ -169,7 +177,7 @@ namespace TsuSploit
                     {
                         if (DefDir.ToString() == "")
                         {
-                            DefaultDir = "Scripts";
+                            DefaultDir = AppDomain.CurrentDomain.BaseDirectory + "Scripts";
                             Console.WriteLine("Failed to set DefaultDir, using default dir (Scripts)...");
                         }
                         else
@@ -177,14 +185,14 @@ namespace TsuSploit
                     }
                     catch (Exception ex)
                     {
-                        DefaultDir = "Scripts";
+                        DefaultDir = AppDomain.CurrentDomain.BaseDirectory + "Scripts";
                         Console.WriteLine("Failed to set DefaultDir, using default dir (Scripts)...");
                         Console.WriteLine(ex);
                     }
                 }
                 else
                 {
-                    DefaultDir = "Scripts";
+                    DefaultDir = AppDomain.CurrentDomain.BaseDirectory + "Scripts";
                     Console.WriteLine("Failed to set DefaultDir, using default dir (Scripts)...");
                 }
                 ScriptPath.Text = DefaultDir;
@@ -853,7 +861,7 @@ namespace TsuSploit
 
         private void ResetDir_Click(object sender, EventArgs e)
         {
-            DefaultDir = "Scripts";
+            DefaultDir = AppDomain.CurrentDomain.BaseDirectory + "Scripts";
             ScriptPath.Text = DefaultDir;
             var a = Registry.CurrentUser.CreateSubKey("ZeroTsuSploit");
             a.SetValue("DefaultDir", DefaultDir);
@@ -862,6 +870,7 @@ namespace TsuSploit
 
         private void OpenScript_Click(object sender, EventArgs e)
         {
+            ScriptOpener.FileName = "";
             var a = ScriptOpener.ShowDialog();
             if (a == DialogResult.OK)
             {
@@ -878,6 +887,7 @@ namespace TsuSploit
 
         private void SaveScript_Click(object sender, EventArgs e)
         {
+            SaveScripts.FileName = "";
             var a = SaveScripts.ShowDialog();
             if (a == DialogResult.OK)
             {
@@ -892,12 +902,33 @@ namespace TsuSploit
                         Byte[] title = new UTF8Encoding(true).GetBytes(BestTextBox.Text);
                         fs.Write(title, 0, title.Length);
                     }
+                    ListBoxInit();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Failed to write file " + SaveScripts.FileName + "\nLogs:\n" + ex);
                 }
             }
+        }
+
+        private void DlLatestVer_Click(object sender, EventArgs e)
+        {
+            ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            using (WebClient wc = new WebClient())
+            {
+                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
+                wc.DownloadFileAsync(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/Updater/bin/Debug/Updater.exe"), "Updater.exe");
+            }
+        }
+
+        private void Wc_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            ProcessStartInfo p = new ProcessStartInfo();
+            p.FileName = "Updater.exe";
+            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -fromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe";
+            Process.Start(p);
         }
 
         private void WaitInjectTime_TextChanged(object sender, EventArgs e)

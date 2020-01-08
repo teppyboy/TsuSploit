@@ -69,6 +69,7 @@
             this.FolderSetter = new System.Windows.Forms.FolderBrowserDialog();
             this.ScriptOpener = new System.Windows.Forms.OpenFileDialog();
             this.SaveScripts = new System.Windows.Forms.SaveFileDialog();
+            this.DlLatestVer = new MetroFramework.Controls.MetroButton();
             this.TabControl.SuspendLayout();
             this.ApiLoader.SuspendLayout();
             this.SettingsPage.SuspendLayout();
@@ -86,7 +87,7 @@
             // ClearBtn
             // 
             this.ClearBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.ClearBtn.Location = new System.Drawing.Point(677, 353);
+            this.ClearBtn.Location = new System.Drawing.Point(677, 352);
             this.ClearBtn.Name = "ClearBtn";
             this.ClearBtn.Size = new System.Drawing.Size(110, 23);
             this.ClearBtn.TabIndex = 6;
@@ -179,7 +180,7 @@
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Location = new System.Drawing.Point(0, 25);
             this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 0;
+            this.TabControl.SelectedIndex = 1;
             this.TabControl.Size = new System.Drawing.Size(800, 425);
             this.TabControl.TabIndex = 3;
             this.TabControl.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -271,6 +272,7 @@
             // SettingsPage
             // 
             this.SettingsPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.SettingsPage.Controls.Add(this.DlLatestVer);
             this.SettingsPage.Controls.Add(this.ResetDir);
             this.SettingsPage.Controls.Add(this.ScPathTxt);
             this.SettingsPage.Controls.Add(this.ScriptPath);
@@ -545,6 +547,18 @@
             this.SaveScripts.Filter = "Lua files|*.lua|Text file|*.txt|All files|*.*";
             this.SaveScripts.Title = "TsuSploit Script Saver";
             // 
+            // DlLatestVer
+            // 
+            this.DlLatestVer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.DlLatestVer.Location = new System.Drawing.Point(5, 355);
+            this.DlLatestVer.Name = "DlLatestVer";
+            this.DlLatestVer.Size = new System.Drawing.Size(171, 23);
+            this.DlLatestVer.TabIndex = 10;
+            this.DlLatestVer.Text = "Update to the Latest Version";
+            this.DlLatestVer.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.DlLatestVer.UseSelectable = true;
+            this.DlLatestVer.Click += new System.EventHandler(this.DlLatestVer_Click);
+            // 
             // TsuMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -616,6 +630,7 @@
         private MetroFramework.Controls.MetroButton SaveScript;
         private System.Windows.Forms.OpenFileDialog ScriptOpener;
         private System.Windows.Forms.SaveFileDialog SaveScripts;
+        private MetroFramework.Controls.MetroButton DlLatestVer;
     }
 }
 

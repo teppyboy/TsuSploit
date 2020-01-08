@@ -71,6 +71,8 @@ namespace Updater
                         File.Delete(rndFileName);
                         Console.WriteLine("Deleted " + rndFileName);
                         Console.WriteLine("Update sucess...");
+                        if (Program.relaunch)
+                            LaunchApp();
                         Environment.Exit(0);
                     }
                     else
@@ -79,6 +81,8 @@ namespace Updater
                         Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                         //File.Delete(rndFileName);
                         Console.WriteLine("New file does not exist, nothing to update...");
+                        if (Program.relaunch)
+                            LaunchApp();
                         Environment.Exit(0);
                     }
                 }
@@ -88,12 +92,16 @@ namespace Updater
                     Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                     Console.WriteLine(ex);
                     MessageBox.Show("Failed to update app so i restored original app. Logs are below...\n" + ex, "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (Program.relaunch)
+                        LaunchApp();
                     Environment.Exit(0);
                 }
             }
             else
             {
                 Console.WriteLine("Main file does not exist, nothing to update...");
+                if (Program.relaunch)
+                    LaunchApp();
                 Environment.Exit(0);
             }
         }
@@ -185,6 +193,8 @@ namespace Updater
                     File.Delete(rndFile);
                     Console.WriteLine("Deleted " + rndFile);
                     Console.WriteLine("Update sucess...");
+                    if (Program.relaunch)
+                        LaunchApp();
                     Environment.Exit(0);
                 }
                 catch (Exception ex)
@@ -194,6 +204,8 @@ namespace Updater
                     File.Move(rndFileName, Program.baseApp);
                     File.Delete(rndFile);
                     MessageBox.Show("Failed to update app so i reverted update.... Logs are below...\n" + ex, "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (Program.relaunch)
+                        LaunchApp();
                     Environment.Exit(0);
                 }
             }
@@ -202,13 +214,15 @@ namespace Updater
                 Console.WriteLine("Downloaded file size is 0, restoring original app...");
                 File.Move(rndFileName, Program.baseApp);
                 File.Delete(rndFile);
-                MessageBox.Show("Failed to update app so i reverted update....", "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to update app so i reverted update....", "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                if (Program.relaunch)
+                    LaunchApp();
                 Environment.Exit(0);
             }
         }
         private void LaunchApp()
         {
-
+            Process.Start(Program.baseApp);
         }
         internal static readonly char[] chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
