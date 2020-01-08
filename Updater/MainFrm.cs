@@ -34,7 +34,7 @@ namespace Updater
                 Updater();
             }
         }
-        private void Updater()
+        private async void Updater()
         {
             if (File.Exists(Program.baseApp))
             {
@@ -66,9 +66,11 @@ namespace Updater
                             proc.Kill();
                             Console.WriteLine("Killed " + appName);
                         }
+                        await Task.Delay(100);
                         File.Move(Program.newApp, Program.baseApp);
                         Console.WriteLine("Moved " + Program.newApp + " to " + Program.baseApp);
                         Console.WriteLine("Deleting old file...");
+                        await Task.Delay(100);
                         File.Delete(rndFileName);
                         Console.WriteLine("Deleted " + rndFileName);
                         Console.WriteLine("Update sucess...");
@@ -78,10 +80,12 @@ namespace Updater
                     }
                     else
                     {
+                        await Task.Delay(100);
                         File.Move(rndFileName, Program.baseApp);
                         Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                         //File.Delete(rndFileName);
                         Console.WriteLine("New file does not exist, nothing to update...");
+                        await Task.Delay(100);
                         if (Program.relaunch)
                             LaunchApp();
                         Environment.Exit(0);
@@ -89,6 +93,7 @@ namespace Updater
                 }
                 catch (Exception ex)
                 {
+                    await Task.Delay(100);
                     File.Move(rndFileName, Program.baseApp);
                     Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                     Console.WriteLine(ex);
@@ -101,13 +106,14 @@ namespace Updater
             else
             {
                 Console.WriteLine("Main file does not exist, nothing to update...");
+                await Task.Delay(100);
                 if (Program.relaunch)
                     LaunchApp();
                 Environment.Exit(0);
             }
         }
 
-        private void MultiUpdater()
+        private async void MultiUpdater()
         {
             for (var i = 0;  i < Program.baseApps.ToArray().Length; i += 1)
             {
@@ -145,15 +151,18 @@ namespace Updater
                                 proc.Kill();
                                 Console.WriteLine("Killed " + appName);
                             }
+                            await Task.Delay(100);
                             File.Move(Program.newApps.ToArray()[i], Program.baseApps.ToArray()[1]);
                             Console.WriteLine("Moved " + Program.newApps.ToArray()[1] + " to " + Program.baseApps.ToArray()[1]);
                             Console.WriteLine("Deleting old file...");
+                            await Task.Delay(100);
                             File.Delete(rndFileName);
                             Console.WriteLine("Deleted " + rndFileName);
                             Console.WriteLine("Update sucess...");
                         }
                         else
                         {
+                            await Task.Delay(100);
                             File.Move(rndFileName, Program.baseApps.ToArray()[i]);
                             Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                             //File.Delete(rndFileName);
@@ -162,6 +171,7 @@ namespace Updater
                     }
                     catch (Exception ex)
                     {
+                        await Task.Delay(100);
                         File.Move(rndFileName, Program.baseApps.ToArray()[i]);
                         Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                         Console.WriteLine(ex);

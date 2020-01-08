@@ -927,7 +927,7 @@ namespace TsuSploit
         {
             ProcessStartInfo p = new ProcessStartInfo();
             p.FileName = "Updater.exe";
-            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -fromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe";
+            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -fromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe -relaunch";
             Process.Start(p);
         }
 
