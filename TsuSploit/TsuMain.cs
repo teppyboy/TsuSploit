@@ -586,7 +586,6 @@ namespace TsuSploit
                                 if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "SirHurt.dll") != 0)
                                 {
                                     Console.WriteLine("Injected SirHurtAPI.");
-                                    SirHurtAPI.SirHurtAPI.Execute(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"), true);
                                     //MessageBox.Show("Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
@@ -602,6 +601,7 @@ namespace TsuSploit
                                 Console.WriteLine(ex);
                             }
                         }
+                        SirHurtAPI.SirHurtAPI.Execute(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"), true);
                     }
                     else if (APIType.Text == "Krnl")
                     {
@@ -610,7 +610,7 @@ namespace TsuSploit
                             try
                             {
                                 var injector = new Injector(rbx);
-                                if ((injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "krnl2.dll") != 0) && (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "Indicium-Supra.dll") != 0))
+                                if ((injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "krnl.dll") != 0) && (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "Indicium-Supra.dll") != 0))
                                 {
                                     Console.WriteLine("Injected SirHurtAPI.");
                                     KrnlAPI.Pipe(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));

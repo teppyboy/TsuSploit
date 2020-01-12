@@ -303,7 +303,6 @@
             this.LatestV.Text = "Latest Version: 02160216";
             this.LatestV.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.LatestV.UseCustomBackColor = true;
-            this.LatestV.Visible = false;
             // 
             // CurrentV
             // 
@@ -314,7 +313,6 @@
             this.CurrentV.Text = "Current Version: 02020202";
             this.CurrentV.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.CurrentV.UseCustomBackColor = true;
-            this.CurrentV.Visible = false;
             // 
             // DlLatestVer
             // 
