@@ -16,11 +16,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Net;
 using System.ComponentModel;
+using TsuSploit.External_API;
 
 namespace TsuSploit
 {
     public partial class TsuMain : Form
     {
+        public static string Version = "1.0.1";
         public TsuMain()
         {
             InitializeComponent();
@@ -29,6 +31,22 @@ namespace TsuSploit
             RegSet();
             ListBoxInit();
             StatusChecker.Start(); //To hide the easter egg.
+            ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    LatestV.Text = wc.DownloadString(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/latest.txt"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to download latest version data! Using ?.?.?");
+                LatestV.Text = "Latest Version: ?.?.?";
+            }
+            CurrentV.Text = "Current Version: " + Version;
             StartTimer.Start(); // Make sure all ScintillaNET loaded before visible... 
             FocusCheck.Start();
         }
@@ -62,7 +80,7 @@ namespace TsuSploit
         }
         private void ListBoxInit()
         {
-            Directory.CreateDirectory("Scripts");
+            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Scripts");
             ListBox.Items.Clear();
             DirSearch(ListBox, DefaultDir);
         }
@@ -125,7 +143,7 @@ namespace TsuSploit
                 {
                     try
                     {
-                        if (ApiTypes.ToString() == "WeAreDevs API" || ApiTypes.ToString() == "EasyExploits API" || ApiTypes.ToString() == "ApiModule" || ApiTypes.ToString() == "SirHurtAPI")
+                        if (ApiTypes.ToString() == "WeAreDevs API" || ApiTypes.ToString() == "EasyExploits API" || ApiTypes.ToString() == "ApiModule" || ApiTypes.ToString() == "SirHurtAPI" || ApiTypes.ToString() == "Krnl")
                         {
                             APIType.Text = ApiTypes.ToString();
                         }
@@ -408,6 +426,7 @@ namespace TsuSploit
         }
         private void InjectBtn_Click(object sender, EventArgs e)
         {
+            StatusTxt.Text = "Status: Injecting";
             Process[] pname = Process.GetProcessesByName("RobloxPlayerBeta");
             if (pname.Length != 0)
             {
@@ -438,6 +457,7 @@ namespace TsuSploit
                                         if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "exploit-main.dll") != 0)
                                         {
                                             Console.WriteLine("Injected WeAreDevs API.");
+                                            ExploitAPI.SendLuaScript(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));
                                             //MessageBox.Show("Injected WeAreDevs API", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                         }
                                         else
@@ -488,6 +508,7 @@ namespace TsuSploit
                                 if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "EasyExploitsDLL.dll") != 0)
                                 {
                                     Console.WriteLine("Injected EasyExploits API.");
+                                    Module.ExecuteScript(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));
                                     //MessageBox.Show("Injected EasyExploits API", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
@@ -526,6 +547,7 @@ namespace TsuSploit
                                 if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "ApiModuleDLL.dll") != 0)
                                 {
                                     Console.WriteLine("Injected APiModule.");
+                                    ApiModule.ApiModule.ExecuteScript(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));
                                     //MessageBox.Show("Injected APiModule", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
@@ -564,6 +586,7 @@ namespace TsuSploit
                                 if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "SirHurt.dll") != 0)
                                 {
                                     Console.WriteLine("Injected SirHurtAPI.");
+                                    SirHurtAPI.SirHurtAPI.Execute(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"), true);
                                     //MessageBox.Show("Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
@@ -576,6 +599,33 @@ namespace TsuSploit
                             catch (Exception ex)
                             {
                                 Console.WriteLine("Failed to inject SirHurtAPI [T/C].");
+                                Console.WriteLine(ex);
+                            }
+                        }
+                    }
+                    else if (APIType.Text == "Krnl")
+                    {
+                        foreach (var rbx in Process.GetProcessesByName("RobloxPlayerBeta"))
+                        {
+                            try
+                            {
+                                var injector = new Injector(rbx);
+                                if ((injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "krnl2.dll") != 0) && (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "Indicium-Supra.dll") != 0))
+                                {
+                                    Console.WriteLine("Injected SirHurtAPI.");
+                                    KrnlAPI.Pipe(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));
+                                    //MessageBox.Show("Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Failed to inject SirHurtAPI");
+                                    //MessageBox.Show("Failed to inject SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                                injector.Dispose();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Failed to inject Krnl [T/C].");
                                 Console.WriteLine(ex);
                             }
                         }
@@ -638,6 +688,10 @@ namespace TsuSploit
                 else if (APIType.Text == "SirHurtAPI")
                 {
                     SirHurtAPI.SirHurtAPI.Execute(BestTextBox.Text, true);
+                }
+                else if (APIType.Text == "Krnl")
+                {
+                    KrnlAPI.Pipe(BestTextBox.Text);
                 }
                 else
                     MessageBox.Show("No API selected.", "TsuSploit");
@@ -799,6 +853,13 @@ namespace TsuSploit
                     else
                         StatusTxt.Text = "Status: Not Injected";
                 }
+                else if (APIType.Text == "Krnl")
+                {
+                    if (KrnlAPI.isKrnlInjected())
+                        StatusTxt.Text = "Status: Injected";
+                    else
+                        StatusTxt.Text = "Status: Not Injected";
+                }
                 else
                     StatusTxt.Text = "Status: Not Injected";
             }
@@ -913,13 +974,22 @@ namespace TsuSploit
 
         private void DlLatestVer_Click(object sender, EventArgs e)
         {
-            ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            using (WebClient wc = new WebClient())
+            try
             {
-                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
-                wc.DownloadFileAsync(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/Updater/bin/Debug/Updater.exe"), "Updater.exe");
+                ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                using (WebClient wc = new WebClient())
+                {
+                    wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
+                    wc.DownloadFileAsync(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/Updater/bin/Debug/Updater.exe"), "Updater.exe");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to download Updater.exe");
+                Console.WriteLine("Log: " + ex);
+                MessageBox.Show("Failed to download Updater.exe\nLog:\n" + ex);
             }
         }
 
@@ -945,6 +1015,7 @@ namespace TsuSploit
         }
         private void SilentInject()
         {
+            StatusTxt.Text = "Status: Injecting";
             isInjecting = true;
             Process[] pname = Process.GetProcessesByName("RobloxPlayerBeta");
             if (pname.Length != 0)
@@ -1088,6 +1159,32 @@ namespace TsuSploit
                         }
                     }
                 }
+                else if (APIType.Text == "Krnl")
+                {
+                    foreach (var rbx in Process.GetProcessesByName("RobloxPlayerBeta"))
+                    {
+                        try
+                        {
+                            var injector = new Injector(rbx);
+                            if ((injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "krnl2.dll") != 0) && (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "Indicium-Supra.dll") != 0))
+                            {
+                                Console.WriteLine("Injected SirHurtAPI.");
+                                //MessageBox.Show("Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Failed to inject SirHurtAPI");
+                                //MessageBox.Show("Failed to inject SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            injector.Dispose();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Failed to inject Krnl [T/C].");
+                            Console.WriteLine(ex);
+                        }
+                    }
+                }
                 else
                     Console.WriteLine("No API selected.");
                 }
@@ -1172,7 +1269,31 @@ namespace TsuSploit
                             WaitInjectTime.Enabled = true;
                         }
                     }
+                else if (APIType.Text == "Krnl")
+                {
+                    if (!KrnlAPI.isKrnlInjected())
+                    {
+                        WaitInjectTime.Enabled = false;
+                        if (Waiter < (WaitBeforeInject * 10))
+                        {
+                            Console.WriteLine("Waiting (milisecond*100):" + Waiter.ToString());
+                            Waiter++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Waited complete, Injecting...");
+                            SilentInject();
+                            Console.WriteLine("Reseted waiter to 0");
+                            Waiter = 0; // Reset waiter to 0
+                        }
+                    }
+                    else
+                    {
+                        Waiter = 0; // Reset waiter to 0
+                        WaitInjectTime.Enabled = true;
+                    }
                 }
+            }
             }
 
             private void TopMostCheck_CheckedChanged(object sender, EventArgs e)

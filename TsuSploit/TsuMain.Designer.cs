@@ -45,6 +45,8 @@
             this.ListBox = new System.Windows.Forms.ListBox();
             this.StatusTxt = new MetroFramework.Controls.MetroLabel();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.LatestV = new MetroFramework.Controls.MetroLabel();
+            this.CurrentV = new MetroFramework.Controls.MetroLabel();
             this.DlLatestVer = new MetroFramework.Controls.MetroButton();
             this.ResetDir = new MetroFramework.Controls.MetroButton();
             this.ScPathTxt = new MetroFramework.Controls.MetroLabel();
@@ -164,7 +166,8 @@
             "EasyExploits API",
             "WeAreDevs API",
             "ApiModule",
-            "SirHurtAPI"});
+            "SirHurtAPI",
+            "Krnl"});
             this.APIType.Location = new System.Drawing.Point(611, 5);
             this.APIType.Name = "APIType";
             this.APIType.Size = new System.Drawing.Size(178, 29);
@@ -180,7 +183,7 @@
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Location = new System.Drawing.Point(0, 25);
             this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 0;
+            this.TabControl.SelectedIndex = 1;
             this.TabControl.Size = new System.Drawing.Size(800, 425);
             this.TabControl.TabIndex = 3;
             this.TabControl.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -272,6 +275,8 @@
             // SettingsPage
             // 
             this.SettingsPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.SettingsPage.Controls.Add(this.LatestV);
+            this.SettingsPage.Controls.Add(this.CurrentV);
             this.SettingsPage.Controls.Add(this.DlLatestVer);
             this.SettingsPage.Controls.Add(this.ResetDir);
             this.SettingsPage.Controls.Add(this.ScPathTxt);
@@ -289,6 +294,28 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             // 
+            // LatestV
+            // 
+            this.LatestV.Location = new System.Drawing.Point(1, 309);
+            this.LatestV.Name = "LatestV";
+            this.LatestV.Size = new System.Drawing.Size(181, 22);
+            this.LatestV.TabIndex = 12;
+            this.LatestV.Text = "Latest Version: 02160216";
+            this.LatestV.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.LatestV.UseCustomBackColor = true;
+            this.LatestV.Visible = false;
+            // 
+            // CurrentV
+            // 
+            this.CurrentV.Location = new System.Drawing.Point(1, 331);
+            this.CurrentV.Name = "CurrentV";
+            this.CurrentV.Size = new System.Drawing.Size(181, 22);
+            this.CurrentV.TabIndex = 11;
+            this.CurrentV.Text = "Current Version: 02020202";
+            this.CurrentV.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.CurrentV.UseCustomBackColor = true;
+            this.CurrentV.Visible = false;
+            // 
             // DlLatestVer
             // 
             this.DlLatestVer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -296,7 +323,7 @@
             this.DlLatestVer.Name = "DlLatestVer";
             this.DlLatestVer.Size = new System.Drawing.Size(171, 23);
             this.DlLatestVer.TabIndex = 10;
-            this.DlLatestVer.Text = "Update to the Latest Version";
+            this.DlLatestVer.Text = "Update";
             this.DlLatestVer.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.DlLatestVer.UseSelectable = true;
             this.DlLatestVer.Click += new System.EventHandler(this.DlLatestVer_Click);
@@ -631,6 +658,8 @@
         private System.Windows.Forms.OpenFileDialog ScriptOpener;
         private System.Windows.Forms.SaveFileDialog SaveScripts;
         private MetroFramework.Controls.MetroButton DlLatestVer;
+        private MetroFramework.Controls.MetroLabel LatestV;
+        private MetroFramework.Controls.MetroLabel CurrentV;
     }
 }
 

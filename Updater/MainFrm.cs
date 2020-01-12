@@ -66,7 +66,6 @@ namespace Updater
                             proc.Kill();
                             Console.WriteLine("Killed " + appName);
                         }
-                        await Task.Delay(100);
                         File.Move(Program.newApp, Program.baseApp);
                         Console.WriteLine("Moved " + Program.newApp + " to " + Program.baseApp);
                         Console.WriteLine("Deleting old file...");
@@ -80,12 +79,12 @@ namespace Updater
                     }
                     else
                     {
-                        await Task.Delay(100);
+                        await Task.Delay(500);
                         File.Move(rndFileName, Program.baseApp);
                         Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                         //File.Delete(rndFileName);
                         Console.WriteLine("New file does not exist, nothing to update...");
-                        await Task.Delay(100);
+                        await Task.Delay(500);
                         if (Program.relaunch)
                             LaunchApp();
                         Environment.Exit(0);
@@ -93,7 +92,7 @@ namespace Updater
                 }
                 catch (Exception ex)
                 {
-                    await Task.Delay(100);
+                    await Task.Delay(500);
                     File.Move(rndFileName, Program.baseApp);
                     Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                     Console.WriteLine(ex);
@@ -106,7 +105,7 @@ namespace Updater
             else
             {
                 Console.WriteLine("Main file does not exist, nothing to update...");
-                await Task.Delay(100);
+                await Task.Delay(500);
                 if (Program.relaunch)
                     LaunchApp();
                 Environment.Exit(0);
@@ -162,7 +161,7 @@ namespace Updater
                         }
                         else
                         {
-                            await Task.Delay(100);
+                            await Task.Delay(500);
                             File.Move(rndFileName, Program.baseApps.ToArray()[i]);
                             Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                             //File.Delete(rndFileName);
@@ -171,7 +170,7 @@ namespace Updater
                     }
                     catch (Exception ex)
                     {
-                        await Task.Delay(100);
+                        await Task.Delay(500);
                         File.Move(rndFileName, Program.baseApps.ToArray()[i]);
                         Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                         Console.WriteLine(ex);
@@ -215,12 +214,12 @@ namespace Updater
                 {
                     Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
                     Console.WriteLine(ex);
-                    await Task.Delay(100);
+                    await Task.Delay(500);
                     File.Move(rndFileName, Program.baseApp);
-                    await Task.Delay(100);
+                    await Task.Delay(500);
                     File.Delete(rndFile);
                     MessageBox.Show("Failed to update app so i reverted update.... Logs are below...\n" + ex, "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    await Task.Delay(100);
+                    await Task.Delay(500);
                     if (Program.relaunch)
                         LaunchApp();
                     Environment.Exit(0);
@@ -230,9 +229,9 @@ namespace Updater
             {
                 Console.WriteLine("Downloaded file size is 0, restoring original app...");
                 File.Move(rndFileName, Program.baseApp);
-                await Task.Delay(100);
+                await Task.Delay(500);
                 File.Delete(rndFile);
-                await Task.Delay(100);
+                await Task.Delay(500);
                 MessageBox.Show("Failed to update app so i reverted update....", "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error); 
                 if (Program.relaunch)
                     LaunchApp();

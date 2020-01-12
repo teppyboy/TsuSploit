@@ -3,3 +3,8 @@ R:\TsuSploit\TsuSploit\ApiModule\bin\Debug\ApiModule.pdb
 R:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.csprojAssemblyReference.cache
 R:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.dll
 R:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.pdb
+E:\TsuSploit\TsuSploit\ApiModule\bin\Debug\ApiModule.dll
+E:\TsuSploit\TsuSploit\ApiModule\bin\Debug\ApiModule.pdb
+E:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.csprojAssemblyReference.cache
+E:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.dll
+E:\TsuSploit\TsuSploit\ApiModule\obj\Debug\ApiModule.pdb

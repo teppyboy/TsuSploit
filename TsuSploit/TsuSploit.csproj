@@ -108,6 +108,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="External API\KrnlAPI.cs" />
     <Compile Include="TsuMain.cs">
       <SubType>Form</SubType>
     </Compile>
