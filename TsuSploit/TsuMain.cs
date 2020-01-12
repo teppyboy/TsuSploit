@@ -38,7 +38,7 @@ namespace TsuSploit
             {
                 using (WebClient wc = new WebClient())
                 {
-                    LatestV.Text = wc.DownloadString(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/latest.txt"));
+                    LatestV.Text = "Latest Version: " + wc.DownloadString(new Uri("https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/latest.txt"));
                 }
             }
             catch (Exception ex)
