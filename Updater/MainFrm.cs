@@ -22,10 +22,11 @@ namespace Updater
         string appName = Path.GetFileNameWithoutExtension(Program.baseApp);
         string rndFileName = AppDomain.CurrentDomain.BaseDirectory + RandomString(18) + ".tmp";
         string rndFile = AppDomain.CurrentDomain.BaseDirectory + RandomString(18) + ".tmp";
+        int AppCurrent;
         public MainFrm()
         {
             InitializeComponent();
-            if (Program.mapmode)
+            if (Program.mapmode || Program.mapmodeUrl)
             {
                 MultiUpdater();
             }
@@ -127,7 +128,7 @@ namespace Updater
                         File.Move(Program.baseApps.ToArray()[i], rndFileName);
                         Console.WriteLine("Moved " + Program.baseApps.ToArray()[i] + " to " + rndFileName);
                         Console.WriteLine("Done");
-                        /*if (Program.urlMode)
+                        if (Program.mapmodeUrl)
                         {
                             Console.WriteLine("Url mode enabled, downloading file...");
                             using (WebClient wc = new WebClient())
@@ -135,37 +136,41 @@ namespace Updater
                                 ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
                                 ServicePointManager.Expect100Continue = true;
                                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                                wc.DownloadFileCompleted += wc_DFC;
-                                Console.WriteLine("Begin to download " + Program.newApp);
-                                wc.DownloadFileAsync(new System.Uri(Program.newApp), rndFile);
+                                wc.DownloadFileCompleted += wc_DFCMulti;
+                                wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
+                                Console.WriteLine("Begin to download " + Program.newApps.ToArray()[i]);
+                                AppCurrent = i;
+                                wc.DownloadFileAsync(new Uri(Program.newApps.ToArray()[i]), rndFile);
                                 wc.Dispose();
                             }
                         }
-                        else */
-                        if (File.Exists(Program.newApps.ToArray()[i]))
-                        {
-                            Console.WriteLine("Replacing file...");
-                            foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(appName)))
-                            {
-                                proc.Kill();
-                                Console.WriteLine("Killed " + appName);
-                            }
-                            await Task.Delay(100);
-                            File.Move(Program.newApps.ToArray()[i], Program.baseApps.ToArray()[1]);
-                            Console.WriteLine("Moved " + Program.newApps.ToArray()[1] + " to " + Program.baseApps.ToArray()[1]);
-                            Console.WriteLine("Deleting old file...");
-                            await Task.Delay(100);
-                            File.Delete(rndFileName);
-                            Console.WriteLine("Deleted " + rndFileName);
-                            Console.WriteLine("Update sucess...");
-                        }
                         else
                         {
-                            await Task.Delay(500);
-                            File.Move(rndFileName, Program.baseApps.ToArray()[i]);
-                            Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
-                            //File.Delete(rndFileName);
-                            Console.WriteLine("New file does not exist, nothing to update...");
+                            if (File.Exists(Program.newApps.ToArray()[i]))
+                            {
+                                Console.WriteLine("Replacing file...");
+                                foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Program.baseApps.ToArray()[i])))
+                                {
+                                    proc.Kill();
+                                    Console.WriteLine("Killed " + Program.baseApps.ToArray()[i]);
+                                }
+                                await Task.Delay(100);
+                                File.Move(Program.newApps.ToArray()[i], Program.baseApps.ToArray()[i]);
+                                Console.WriteLine("Moved " + Program.newApps.ToArray()[i] + " to " + Program.baseApps.ToArray()[i]);
+                                Console.WriteLine("Deleting old file...");
+                                await Task.Delay(100);
+                                File.Delete(rndFileName);
+                                Console.WriteLine("Deleted " + rndFileName);
+                                Console.WriteLine("Update sucess...");
+                            }
+                            else
+                            {
+                                await Task.Delay(500);
+                                File.Move(rndFileName, Program.baseApps.ToArray()[i]);
+                                Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
+                                //File.Delete(rndFileName);
+                                Console.WriteLine("New file does not exist, nothing to update...");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -182,8 +187,16 @@ namespace Updater
                     Console.WriteLine("Main file does not exist, nothing to update...");
                 }
             }
+            if (Program.relaunch)
+                LaunchApp();
             Environment.Exit(0);
         }
+
+        private async void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            Task.Delay(10);
+        }
+
         private async void wc_DFC(object sender, AsyncCompletedEventArgs e)
         {
             Console.WriteLine("Downloaded " + rndFile + ". Replacing file");
@@ -238,9 +251,69 @@ namespace Updater
                 Environment.Exit(0);
             }
         }
+        private async void wc_DFCMulti(object sender, AsyncCompletedEventArgs e)
+        {
+            Console.WriteLine("Downloaded " + rndFile + ". Replacing file");
+            if (new FileInfo(rndFile).Length != 0)
+            {
+                try
+                {
+                    foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Program.baseApps.ToArray()[AppCurrent])))
+                    {
+                        proc.Kill();
+                        Console.WriteLine("Killed " + Program.baseApps.ToArray()[AppCurrent]);
+                    }
+                    File.Move(rndFile, Program.baseApps.ToArray()[AppCurrent]);
+                    Console.WriteLine("Moved " + rndFile + " to " + Program.baseApps.ToArray()[AppCurrent]);
+                    await Task.Delay(100);
+                    File.Delete(rndFileName);
+                    Console.WriteLine("Deleted " + rndFileName);
+                    await Task.Delay(100);
+                    File.Delete(rndFile);
+                    Console.WriteLine("Deleted " + rndFile);
+                    Console.WriteLine("Update sucess...");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to update app, restoring original app. Logs are below...");
+                    Console.WriteLine(ex);
+                    await Task.Delay(500);
+                    File.Move(rndFileName, Program.baseApps.ToArray()[AppCurrent]);
+                    await Task.Delay(500);
+                    File.Delete(rndFile);
+                    MessageBox.Show("Failed to update app so i reverted update.... Logs are below...\n" + ex, "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Downloaded file size is 0, restoring original app...");
+                File.Move(rndFileName, Program.baseApp);
+                await Task.Delay(500);
+                File.Delete(rndFile);
+                await Task.Delay(500);
+                MessageBox.Show("Failed to update app so i reverted update....", "TsuUpdater", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Program.relaunch)
+                    LaunchApp();
+                Environment.Exit(0);
+            }
+        }
         private void LaunchApp()
         {
-            Process.Start(Program.baseApp);
+            try
+            {
+                if (Program.mapmode || Program.mapmodeUrl)
+                {
+                    Process.Start(Program.relaunchBaseFile);
+                }
+                else
+                    Process.Start(Program.baseApp);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Launching error. Logs are below");
+                Console.WriteLine(ex);
+                MessageBox.Show($"Launching error. Logs are below...\n{ex}");
+            }
         }
         internal static readonly char[] chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();

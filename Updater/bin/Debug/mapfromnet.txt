@@ -1,0 +1,4 @@
+-base.E:\TsuSploit\TsuSploit\Updater\bin\Debug\memes.txt
+-base.E:\TsuSploit\TsuSploit\Updater\bin\Debug\memes2.txt
+-new.E:\TsuSploit\TsuSploit\Updater\bin\Debug\weird.txt
+-new.E:\TsuSploit\TsuSploit\Updater\bin\Debug\weird2.txt

@@ -183,7 +183,7 @@
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Location = new System.Drawing.Point(0, 25);
             this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 1;
+            this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(800, 425);
             this.TabControl.TabIndex = 3;
             this.TabControl.Theme = MetroFramework.MetroThemeStyle.Dark;

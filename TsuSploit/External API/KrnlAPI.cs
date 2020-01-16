@@ -5,7 +5,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 
-namespace TsuSploit.External_API //Sorry Ice Bear but i have to do this...
+namespace TsuSploit.ExternalAPI // External API written by me (not released standalone)
 {
     class KrnlAPI
     {
@@ -38,30 +38,7 @@ namespace TsuSploit.External_API //Sorry Ice Bear but i have to do this...
 		private static extern bool WaitNamedPipe(string name, int timeout);
 		public static bool isKrnlInjected()
 		{
-			return NamedPipeExist("krnlpipe");
-		}
-		private static bool NamedPipeExist(string pipeName)
-		{
-			try
-			{
-				if (!WaitNamedPipe($"\\\\.\\pipe\\{pipeName}", 0))
-				{
-					int lastWin32Error = Marshal.GetLastWin32Error();
-					if (lastWin32Error == 0)
-					{
-						return false;
-					}
-					if (lastWin32Error == 2)
-					{
-						return false;
-					}
-				}
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
+			return Directory.GetFiles("\\\\.\\pipe\\").Contains("\\\\.\\pipe\\krnlpipe");
 		}
 	}
 }
