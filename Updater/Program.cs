@@ -47,7 +47,7 @@ namespace Updater
                 {
                     Console.WriteLine("No argument 3...");
                 }
-                if (args[0].Contains("-baseApp.") || args[0].Contains("-mapper."))
+                if (args[0].Contains("-baseApp.") || args[0].Contains("-mapper.") || args[0].Contains("-mapperFromUrl."))
                 {
                     if (args[0].Contains("-baseApp.") && (args[1].Contains("-newApp.") || args[1].Contains("-newfromUrl.")))
                     {
@@ -123,7 +123,8 @@ namespace Updater
                         }
                         catch (Exception ex)
                         {
-
+                            Console.WriteLine("Download mapper failed...");
+                            Environment.Exit(0);
                         }
                     }
                     else
