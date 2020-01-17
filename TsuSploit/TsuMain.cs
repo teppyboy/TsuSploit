@@ -457,6 +457,7 @@ namespace TsuSploit
                                         if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "exploit-main.dll") != 0)
                                         {
                                             Console.WriteLine("Injected WeAreDevs API.");
+                                            Thread.Sleep(100);
                                             ExploitAPI.SendLuaScript(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"));
                                             //MessageBox.Show("Injected WeAreDevs API", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                         }
@@ -1020,7 +1021,7 @@ namespace TsuSploit
         {
             ProcessStartInfo p = new ProcessStartInfo();
             p.FileName = "Updater.exe";
-            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -fromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe -relaunch";
+            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -newFromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe -relaunch";
             Process.Start(p);
         }
 
