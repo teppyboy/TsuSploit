@@ -72,6 +72,7 @@
             this.FolderSetter = new System.Windows.Forms.FolderBrowserDialog();
             this.ScriptOpener = new System.Windows.Forms.OpenFileDialog();
             this.SaveScripts = new System.Windows.Forms.SaveFileDialog();
+            this.OofRoblox = new MetroFramework.Controls.MetroButton();
             this.TabControl.SuspendLayout();
             this.ApiLoader.SuspendLayout();
             this.SettingsPage.SuspendLayout();
@@ -147,7 +148,7 @@
             // InjectBtn
             // 
             this.InjectBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.InjectBtn.Location = new System.Drawing.Point(5, 7);
+            this.InjectBtn.Location = new System.Drawing.Point(7, 8);
             this.InjectBtn.Name = "InjectBtn";
             this.InjectBtn.Size = new System.Drawing.Size(73, 24);
             this.InjectBtn.TabIndex = 1;
@@ -183,7 +184,7 @@
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Location = new System.Drawing.Point(0, 25);
             this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 0;
+            this.TabControl.SelectedIndex = 1;
             this.TabControl.Size = new System.Drawing.Size(800, 425);
             this.TabControl.TabIndex = 3;
             this.TabControl.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -264,7 +265,7 @@
             // StatusTxt
             // 
             this.StatusTxt.AutoSize = true;
-            this.StatusTxt.Location = new System.Drawing.Point(81, 10);
+            this.StatusTxt.Location = new System.Drawing.Point(82, 10);
             this.StatusTxt.Name = "StatusTxt";
             this.StatusTxt.Size = new System.Drawing.Size(184, 19);
             this.StatusTxt.TabIndex = 7;
@@ -275,6 +276,7 @@
             // SettingsPage
             // 
             this.SettingsPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.SettingsPage.Controls.Add(this.OofRoblox);
             this.SettingsPage.Controls.Add(this.LatestV);
             this.SettingsPage.Controls.Add(this.CurrentV);
             this.SettingsPage.Controls.Add(this.DlLatestVer);
@@ -584,6 +586,18 @@
             this.SaveScripts.Filter = "Lua files|*.lua|Text file|*.txt|All files|*.*";
             this.SaveScripts.Title = "TsuSploit Script Saver";
             // 
+            // OofRoblox
+            // 
+            this.OofRoblox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.OofRoblox.Location = new System.Drawing.Point(564, 61);
+            this.OofRoblox.Name = "OofRoblox";
+            this.OofRoblox.Size = new System.Drawing.Size(222, 23);
+            this.OofRoblox.TabIndex = 13;
+            this.OofRoblox.Text = "Oof Roblox";
+            this.OofRoblox.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.OofRoblox.UseSelectable = true;
+            this.OofRoblox.Click += new System.EventHandler(this.OofRoblox_Click);
+            // 
             // TsuMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -658,6 +672,7 @@
         private MetroFramework.Controls.MetroButton DlLatestVer;
         private MetroFramework.Controls.MetroLabel LatestV;
         private MetroFramework.Controls.MetroLabel CurrentV;
+        private MetroFramework.Controls.MetroButton OofRoblox;
     }
 }
 

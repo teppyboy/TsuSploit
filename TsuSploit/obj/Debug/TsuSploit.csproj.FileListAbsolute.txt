@@ -46,3 +46,4 @@ E:\TsuSploit\TsuSploit\TsuSploit\obj\Debug\TsuSploit.csproj.Fody.CopyLocal.cache
 E:\TsuSploit\TsuSploit\TsuSploit\obj\Debug\TsuSploit.csproj.CopyComplete
 E:\TsuSploit\TsuSploit\TsuSploit\obj\Debug\TsuSploit.exe
 E:\TsuSploit\TsuSploit\TsuSploit\obj\Debug\TsuSploit.pdb
+E:\TsuSploit\TsuSploit\TsuSploit\obj\Debug\TsuSploit.CustomMsgBox.resources

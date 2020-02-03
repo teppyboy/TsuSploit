@@ -17,12 +17,13 @@ using System.Net.Security;
 using System.Net;
 using System.ComponentModel;
 using TsuSploit.ExternalAPI;
+using System.Threading.Tasks;
 
 namespace TsuSploit
 {
     public partial class TsuMain : Form
     {
-        public static string Version = "1.0.2";
+        public static string Version = "1.0.3";
         public TsuMain()
         {
             InitializeComponent();
@@ -569,44 +570,14 @@ namespace TsuSploit
                     }
                     else if (APIType.Text == "SirHurtAPI")
                     {
-                        if (SirHurtAPI.SirHurtAPI.isInjected())
+                        try
                         {
-                            Console.WriteLine("Already injected SirHurtAPI.");
-                            //MessageBox.Show("Already Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
+                            SirHurtAPI.Experimental.LaunchExploit();
                         }
-                        else if (!SirHurtAPI.SirHurtAPI.DownloadDll(false))
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Failed to download SirHurt.dll");
-                            //MessageBox.Show("Failed to download SirHurt.dll", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
+                            Console.WriteLine("Failed to inject SirHurt [T/C]\n" + ex);
                         }
-                        foreach (var rbx in Process.GetProcessesByName("RobloxPlayerBeta"))
-                        {
-                            try
-                            {
-                                var injector = new Injector(rbx);
-                                if (injector.Inject(AppDomain.CurrentDomain.BaseDirectory + "SirHurt.dll") != 0)
-                                {
-                                    Console.WriteLine("Injected SirHurtAPI.");
-                                    Thread.Sleep(250);
-                                    //MessageBox.Show("Injected SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Failed to inject SirHurtAPI");
-                                    //MessageBox.Show("Failed to inject SirHurtAPI", "TsuSploit", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                                injector.Dispose();
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("Failed to inject SirHurtAPI [T/C].");
-                                Console.WriteLine(ex);
-                            }
-                        }
-                        Thread.Sleep(1000);
-                        SirHurtAPI.SirHurtAPI.Execute(new WebClient().DownloadString("http://cdn.tretrauit.epizy.com/files/RBLX_Scripts/Generic/TsuSploit%20Executor.lua"), true);
                     }
                     else if (APIType.Text == "Krnl")
                     {
@@ -995,8 +966,7 @@ namespace TsuSploit
                 }
             }
         }
-
-        private void DlLatestVer_Click(object sender, EventArgs e)
+        private async Task updateME()
         {
             try
             {
@@ -1013,22 +983,66 @@ namespace TsuSploit
             {
                 Console.WriteLine("Failed to download Updater.exe");
                 Console.WriteLine("Log: " + ex);
-                MessageBox.Show("Failed to download Updater.exe\nLog:\n" + ex);
+                var a = new CustomMsgBox().MsgBox("Failed to download Updater.exe\nLog:\n" + ex, "TsuSploit", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (a == DialogResult.Retry)
+                {
+                    await updateME();
+                }
             }
         }
-
-        private void Wc_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private async void DlLatestVer_Click(object sender, EventArgs e)
         {
-            ProcessStartInfo p = new ProcessStartInfo();
-            p.FileName = "Updater.exe";
-            p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -newFromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe -relaunch";
-            Process.Start(p);
+            await updateME();
+        }
+
+        private async void Wc_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (!File.Exists("Updater.exe") || new FileInfo("Updater.exe").Length == 0)
+            {
+                Console.WriteLine("Failed to download Updater.exe [0 bytes or dosen't Exists]");
+                var a = new CustomMsgBox().MsgBox("Failed to download Updater.exe\nLog:\n0 bytes or dosen't Exists", "TsuSploit", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (a == DialogResult.Retry)
+                {
+                    await updateME();
+                }
+            }
+            else
+            {
+                ProcessStartInfo p = new ProcessStartInfo();
+                p.FileName = "Updater.exe";
+                p.Arguments = "-baseApp." + Process.GetCurrentProcess().MainModule.FileName + " -newFromUrl.https://raw.githubusercontent.com/teppyboy/TsuSploit/master/TsuSploit/bin/Debug/TsuSploit.exe -relaunch";
+                Process.Start(p);
+            }
+        }
+        private async Task killRbx()
+        {
+            var ps = Process.GetProcessesByName("RobloxPlayerBeta");
+            if (ps.Length != 0)
+            {
+                foreach (var p in ps)
+                {
+                    p.Kill();
+                }
+                var a = new CustomMsgBox().MsgBox("ROBLOX Killed", "Sucessfully Killed " + ps.Length.ToString() + " processes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                var a = new CustomMsgBox().MsgBox("ROBLOX Not Found", "ROBLOX is not running", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (a == DialogResult.Retry)
+                {
+                    await killRbx();
+                }
+            }
+        }
+        private async void OofRoblox_Click(object sender, EventArgs e)
+        {
+            await killRbx();
         }
 
         private void WaitInjectTime_TextChanged(object sender, EventArgs e)
         {
             var sucess = int.TryParse(WaitInjectTime.Text, out WaitBeforeInject);
-            if (!sucess && (WaitInjectTime.Text == ""))
+            if (!sucess || (WaitInjectTime.Text == ""))
             {
                 WaitBeforeInject = 10;
                 WaitInjectTime.Text = "10";
